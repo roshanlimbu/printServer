@@ -1,6 +1,6 @@
-# Slip Server
+# Nepali Slip Printer
 
-A Node.js server for printing receipt slips with support for Nepali Unicode text. This server provides a REST API to format and print receipts with proper handling of Devanagari characters.
+A Node.js package and server for printing receipt slips with support for Nepali Unicode text. This package provides both a REST API server and a library for programmatic use, with proper handling of Devanagari characters and cross-platform printing.
 
 ## Features
 
@@ -10,12 +10,26 @@ A Node.js server for printing receipt slips with support for Nepali Unicode text
 - ✅ **WiFi printer support** - Print to network-connected printers
 - ✅ **Configurable formatting** - Adjustable page width and organization details
 - ✅ **REST API** - Easy integration with any application
+- ✅ **CLI tool** - Command line interface for quick operations
+- ✅ **NPM package** - Use as a library in your Node.js projects
 
 ## Installation
 
+### As a global CLI tool:
 ```bash
-# Clone or download the project
-cd slipServer
+npm install -g @roshanlimbu/nepali-slip-printer
+```
+
+### As a dependency in your project:
+```bash
+npm install @roshanlimbu/nepali-slip-printer
+```
+
+### For development (clone repository):
+```bash
+# Clone the repository
+git clone https://github.com/roshanlimbu/printServer.git
+cd printServer
 
 # Install dependencies
 npm install
@@ -56,9 +70,83 @@ PRINT_METHOD=auto
 
 ## Usage
 
-### Start the Server
+### CLI Usage (Global Installation)
 
 ```bash
+# Initialize a project with .env file
+nepali-slip-server init
+
+# Start the server
+nepali-slip-server start --port 3000 --org "My Store"
+
+# Print directly from CLI
+nepali-slip-server print --data '[[1,"चामल",5],[2,"दाल",10]]'
+
+# List available printers
+nepali-slip-server printers
+
+# Help
+nepali-slip-server --help
+```
+
+### Library Usage (Programmatic)
+
+```javascript
+const { NepaliSlipPrinter } = require('@roshanlimbu/nepali-slip-printer');
+
+// Create printer instance
+const printer = new NepaliSlipPrinter({
+  orgName: 'My Store',
+  pageWidth: 32,
+  printer: 'HP LaserJet'
+});
+
+// Print data
+const data = [
+  [1, "चामल", 5],
+  [2, "दाल", 10],
+  [3, "तेल", 3]
+];
+
+async function printReceipt() {
+  try {
+    const result = await printer.print(data, {
+      method: 'auto' // auto, windows, cups, file, mock
+    });
+    console.log('Printed:', result.jobId);
+  } catch (error) {
+    console.error('Print failed:', error.message);
+  }
+}
+
+printReceipt();
+```
+
+### Server Usage
+
+```javascript
+const { createServer } = require('@roshanlimbu/nepali-slip-printer');
+
+// Create and start server
+const app = createServer({
+  orgName: 'My Store',
+  pageWidth: 32
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+```
+
+### REST API Usage
+
+#### Start the Server
+
+```bash
+# Using CLI
+nepali-slip-server start
+
+# Or using npm (if cloned repository)
 npm start
 ```
 
