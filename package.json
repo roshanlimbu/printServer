@@ -4,7 +4,7 @@
   "description": "A Node.js server for printing receipts with support for Nepali Unicode text and cross-platform printing",
   "main": "index.js",
   "bin": {
-    "nepali-print-server": "./bin/cli.js"
+    "nepali-print-server": "bin/cli.js"
   },
   "scripts": {
     "start": "node server.js",
